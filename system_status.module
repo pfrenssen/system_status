@@ -1,111 +1,146 @@
 <?php
+/**
+ * @file
+ * Drupal system status
+ */
 
 /**
- * Implements hook_help.
+ * Implements hook_help().
  *
  * Displays help and module information.
- *
- * @param path
- *   Which path of the site we're using to display help
- * @param arg
- *   Array that holds the current path as returned from arg() function
  */
 function system_status_help($path, $arg) {
-	switch ($path) {
-		case "admin/help#system_status" :
-			return '<p>' . t("A module that provides the functionality to remote check on the health of your site and modules.") . '</p>';
-			break;
-	}
+  switch ($path) {
+    case 'admin/help#system_status':
+      return '<p>' . t("A module that provides the functionality to remote check on the health of your site and modules.") . '</p>';
+
+    break;
+  }
 }
 
 /**
  * Implements hook_menu().
  */
 function system_status_menu() {
-	$items = array();
+  $items = array();
 
-	$items['system/status'] = array('page callback' => 'system_status_status_page', 'access callback' => TRUE );
-	$items['admin/config/system/system_status'] = array('title' => 'System Status', 'description' => 'Configuration for System status module', 'page callback' => 'drupal_get_form', 'page arguments' => array('system_status_form'), 'access arguments' => array('access administration pages'), 'type' => MENU_NORMAL_ITEM, );
+  $items['system/status'] = array(
+    'page callback' => 'system_status_status_page',
+    'access callback' => TRUE,
+  );
+  $items['admin/config/system/system_status'] = array(
+    'title' => 'System Status',
+    'description' => 'Configuration for System status module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('system_status_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
 
-	return $items;
+  return $items;
 }
 
 /**
- * Page callback: System settings settings
+ * Page callback: System settings settings.
  *
  * @see system_status_menu()
  */
 function system_status_form($form, &$form_state) {
-	$form['form_service_allow_drupalstatus'] = array('#description'=> t('Allow calls from the servers at http://www.drupalstatus.org and all of their ip ranges.'),'#type' => 'checkbox', '#title' => t('Allow calls from DrupalStatus.org') ,'#default_value' => variable_get('form_service_allow_drupalstatus','0') , );
-	$form['form_public_allow_public'] = array('#description'=> t('Allow calls from ip-adresses as defined below. Please note that they should be comma separated.'),'#type' => 'checkbox', '#title' => t('Allow public calls') ,'#default_value' => variable_get('form_public_allow_public','0'),);
-	$form['form_public_allow_ips'] = array('#type' => 'textfield','#title' => t('Comma seperated list of IP addresses'),'#default_value' => variable_get('form_public_allow_ips','127.0.0.1,::1'), );
-	
-	return system_settings_form($form);
+  $form['form_service_allow_drupalstatus'] = array(
+    '#description' => t('Allow calls from the servers at http://www.drupalstatus.org and all of their ip ranges.'),
+    '#type' => 'checkbox',
+    '#title' => t('Allow calls from DrupalStatus.org'),
+    '#default_value' => variable_get('form_service_allow_drupalstatus', '0'),
+  );
+  $form['form_public_allow_public'] = array(
+    '#description' => t('Allow calls from ip-adresses as defined below. Please note that they should be comma separated.'),
+    '#type' => 'checkbox',
+    '#title' => t('Allow public calls'),
+    '#default_value' => variable_get('form_public_allow_public', '0'),
+  );
+  $form['form_public_allow_ips'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Comma seperated list of IP addresses'),
+    '#default_value' => variable_get('form_public_allow_ips', '127.0.0.1,::1'),
+  );
+  return system_settings_form($form);
 }
 
 
+/**
+ * Access callback: Check ip.
+ */
+function has_access() {
+  if (variable_get('form_service_allow_drupalstatus', 0) == 1) {
+    // For services ranges can be used ..
+    if (match_cidr(ip_address(), "91.212.186.0/24")) {
+      return TRUE;
+    }
+  }
 
-function has_access() {		
-	if(variable_get('form_service_allow_drupalstatus',0) == 1) {
-		// For services ranges can be used ..
-		if(match_cidr(ip_address(), "91.212.186.0/24"))
-			return true;
-	}
-	
-	if(variable_get('form_public_allow_public',0) == 1) {
-		// I took the easy way out here since i didn't want to bother writing something to match v6 subnets 
-		$allowed_ips = explode(',', variable_get('form_public_allow_ips','127.0.0.1,::1'));
-		
-		foreach($allowed_ips as &$address) {
-			if(ip_address() === $address)
-				return true;
-		}
-	}
-	
-	return false;	
+  if (variable_get('form_public_allow_public', 0) == 1) {
+    // I took the easy way out here since i didn't want
+    // to bother writing something to match v6 subnets.
+    $allowed_ips = explode(',', variable_get('form_public_allow_ips', '127.0.0.1,::1'));
+    foreach ($allowed_ips as &$address) {
+      if (ip_address() === $address) {
+        return TRUE;
+      }
+    }
+  }
+  return FALSE;
 }
 
-/*
- * Function to check if an IP adress matches a CIDR range .. 
+/**
+ * Check if an IP adress matches a CIDR range.
+ * @example
  * match_cidr("192.168.0.1","192.168.0.0/16");
  */
-function match_cidr($ip, $range)
-{
-    list ($subnet, $bits) = explode('/', $range);
-    $ip = ip2long($ip);
-    $subnet = ip2long($subnet);
-    $mask = -1 << (32 - $bits);
-    $subnet &= $mask; // in case the supplied subnet wasn't correctly aligned 
-    return ($ip & $mask) == $subnet;
+function match_cidr($ip_address, $range) {
+  list ($subnet, $bits) = explode('/', $range);
+  $ip_address = ip2long($ip_address);
+  $subnet = ip2long($subnet);
+  $mask = -1 << (32 - $bits);
+  // In case the supplied subnet wasn't correctly aligned.
+  $subnet &= $mask;
+  return ($ip_address & $mask) == $subnet;
 }
 
-
+/**
+ * Return JSON formatted module information.
+ */
 function system_status_status_page() {
-	
-	if(!has_access())
-		return MENU_ACCESS_DENIED;
-	
-	$system_modules = system_list('module_enabled');
+  if (!has_access()) {
+    return MENU_ACCESS_DENIED;
+  }
+  $system_modules = system_list('module_enabled');
 
-	// Needless initialisation, but hey
-	$res = array("core" => array(),"contrib"=> array(),"custom" => array());
-	
-	foreach($system_modules as $module => $moduleObj) {
-		
-		// sites/*/modules/custom - I guess regex and full filesystem paths would be better here. 
-		if(strpos($moduleObj->filename,"/modules/custom") === 0) 
-			$res['custom'][$module] = array("version" => $moduleObj->info['version']);
-		
-		// sites/*/modules/contrib
-		if(strpos($moduleObj->filename,"/modules/contrib") === 0) 
-			$res['contrib'][$module] = array("version" => $moduleObj->info['version']);
-		
-		// remaining .. 
-		if(strpos($moduleObj->filename,"modules/") === 0) 
-			$res['core'][$module] = array("version" => $moduleObj->info['version']);
-		
-	}
+  // Needless initialisation, but hey.
+  $res = array(
+    "core" => array(),
+    "contrib" => array(),
+    "custom" => array(),
+  );
 
-	// pretty sure this is not the way to return the data ... how should i do this without rendering a template ?
-	echo json_encode(array("system_status" => $res));
+  foreach ($system_modules as $module => $module_info) {
+    // sites/*/modules/custom
+    // I guess regex and full filesystem paths would be better here.
+    if (strpos($module_info->filename, '/modules/custom') === 0) {
+      $res['custom'][$module] = array("version" => $module_info->info['version']);
+    }
+
+    // sites/*/modules/contrib
+    if (strpos($module_info->filename, '/modules/contrib') === 0) {
+      $res['contrib'][$module] = array("version" => $module_info->info['version']);
+    }
+
+    // Remaining ..
+    if (strpos($module_info->filename, 'modules/') === 0) {
+      $res['core'][$module] = array("version" => $module_info->info['version']);
+    }
+  }
+
+  // Pretty sure this is not the way to return the data...
+  // How should i do this without rendering a template ?
+  echo json_encode(array("system_status" => $res));
 }
