@@ -1,0 +1,4 @@
+name = System Status
+description = "A module that provides the functionality to remote check on the health of your site and modules."
+core = 7.x
+configure = admin/config/system/system_status
