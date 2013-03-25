@@ -79,7 +79,7 @@ function system_status_form($form, &$form_state) {
   $form['form_preg_match_contrib'] = array(
     '#type' => 'textfield',
     '#title' => t('Regular expression to match contrib modules'),
-    '#default_value' => variable_get('form_preg_match_contrib', '{^sites\/([A-z,\.]+)\/modules\/contrib\/*}'),
+    '#default_value' => variable_get('form_preg_match_contrib', '{^sites\/([A-z,\.,\-]+)\/modules\/contrib\/*}'),
     '#access' => variable_get('form_do_match_contrib', '1'),
   );
   $form['form_do_match_custom'] = array(
@@ -91,7 +91,7 @@ function system_status_form($form, &$form_state) {
   $form['form_preg_match_custom'] = array(
     '#type' => 'textfield',
     '#title' => t('Regular expression to match custom modules'),
-    '#default_value' => variable_get('form_preg_match_custom', '{^sites\/([A-z,\.]+)\/modules\/custom\/*}'),
+    '#default_value' => variable_get('form_preg_match_custom', '{^sites\/([A-z,\.,\-]+)\/modules\/custom\/*}'),
     '#access' => variable_get('form_do_match_custom', '0'),
   );
   return system_settings_form($form);
@@ -156,7 +156,7 @@ function system_status_status_page() {
 
     // Match for custom modules.
     if (variable_get('form_do_match_custom', '0')) {
-      $regex = variable_get('form_preg_match_custom', '{^sites\/([A-z,\.]+)\/modules\/custom\/*}');
+      $regex = variable_get('form_preg_match_custom', '{^sites\/([A-z,\.,\-]+)\/modules\/custom\/*}');
       if (preg_match($regex, $filename)) {
         $res['custom'][$module] = array("version" => $module_info->info['version']);
       }
@@ -164,7 +164,7 @@ function system_status_status_page() {
 
     // Match for contrib modules.
     if (variable_get('form_do_match_contrib', '1')) {
-      $regex = variable_get('form_preg_match_contrib', '{^sites\/([A-z,\.]+)\/modules\/contrib\/*}');
+      $regex = variable_get('form_preg_match_contrib', '{^sites\/([A-z,\.,\-]+)\/modules\/contrib\/*}');
       if (preg_match($regex, $filename)) {
         $res['contrib'][$module] = array("version" => $module_info->info['version']);
       }
