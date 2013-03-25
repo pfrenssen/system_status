@@ -160,6 +160,8 @@ function system_status_status_page() {
       if (preg_match($regex, $filename)) {
         $res['custom'][$module] = array("version" => $module_info->info['version']);
       }
+    } else {
+      $res['custom'] = "disabled";
     }
 
     // Match for contrib modules.
@@ -168,6 +170,8 @@ function system_status_status_page() {
       if (preg_match($regex, $filename)) {
         $res['contrib'][$module] = array("version" => $module_info->info['version']);
       }
+    } else {
+      $res['contrib'] = "disabled";
     }
 
     // Core modules.
@@ -175,6 +179,8 @@ function system_status_status_page() {
       if (strtolower($module_info->info['package']) == "core") {
         $res['core'][$module] = array("version" => $module_info->info['version']);
       }
+    } else {
+      $res['core'] = "disabled";
     }
   }
 
