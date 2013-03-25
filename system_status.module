@@ -147,24 +147,24 @@ function system_status_status_page() {
   );
 
   foreach ($system_modules as $module => $module_info) {
-  $filename = $module_info->filename;
+    $filename = $module_info->filename;
 
-  // Match for custom modules
-  $regex = variable_get('form_preg_match_custom', '{^sites\/([a-z]+)\/modules\/custom\/*}');
-  if(preg_match($regex, $filename)) {
-    $res['custom'][$module] = array("version" => $module_info->info['version']);
-  }
+    // Match for custom modules.
+    $regex = variable_get('form_preg_match_custom', '{^sites\/([a-z]+)\/modules\/custom\/*}');
+    if (preg_match($regex, $filename)) {
+      $res['custom'][$module] = array("version" => $module_info->info['version']);
+    }
 
-  // Match for contrib modules
-  $regex = variable_get('form_preg_match_contrib', '{^sites\/([a-z]+)\/modules\/contrib\/*}');
-  if(preg_match($regex, $filename)) {
-    $res['contrib'][$module] = array("version" => $module_info->info['version']);
-  }
+    // Match for contrib modules.
+    $regex = variable_get('form_preg_match_contrib', '{^sites\/([a-z]+)\/modules\/contrib\/*}');
+    if (preg_match($regex, $filename)) {
+      $res['contrib'][$module] = array("version" => $module_info->info['version']);
+    }
 
-  // Core modules
-  if (strtolower($module_info->info['package']) == "core") {
-    $res['core'][$module] = array("version" => $module_info->info['version']);
-  }	
+    // Core modules.
+    if (strtolower($module_info->info['package']) == "core") {
+      $res['core'][$module] = array("version" => $module_info->info['version']);
+    }
   }
 
   echo drupal_json_encode(array("system_status" => $res));
