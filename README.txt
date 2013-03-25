@@ -33,4 +33,5 @@ After installation go to the admin page under
 /admin/config/system/system_status and allow public calls. 
 (The default entered IP address should work fine)
 
-Once you saved the settings you should be able to: GET /system/status
+Once you saved the settings you should be able to: 
+GET $base_url/system/status  (ex. http://www.my-site.com/system/status ) 
