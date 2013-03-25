@@ -29,7 +29,8 @@ contributed module.
 
 -- USAGE --
 
-After installation go to the admin page under /admin/config/system and
-allow public calls. (The default entered IP address should work fine)
+After installation go to the admin page under 
+/admin/config/system/system_status and allow public calls. 
+(The default entered IP address should work fine)
 
 Once you saved the settings you should be able to: GET /system/status
