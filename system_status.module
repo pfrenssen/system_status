@@ -86,13 +86,13 @@ function system_status_form($form, &$form_state) {
     '#description' => t('Scan for custom modules using a regular expression.'),
     '#type' => 'checkbox',
     '#title' => t('Enable custom modules'),
-    '#default_value' => variable_get('form_do_match_custom', '1'),
+    '#default_value' => variable_get('form_do_match_custom', '0'),
   );
   $form['form_preg_match_custom'] = array(
     '#type' => 'textfield',
     '#title' => t('Regular expression to match custom modules'),
     '#default_value' => variable_get('form_preg_match_custom', '{^sites\/([a-z]+)\/modules\/custom\/*}'),
-    '#access' => variable_get('form_do_match_custom', '1'),
+    '#access' => variable_get('form_do_match_custom', '0'),
   );
   return system_settings_form($form);
 }
@@ -155,7 +155,7 @@ function system_status_status_page() {
     $filename = $module_info->filename;
 
     // Match for custom modules.
-    if (variable_get('form_do_match_custom', '1')) {
+    if (variable_get('form_do_match_custom', '0')) {
       $regex = variable_get('form_preg_match_custom', '{^sites\/([a-z]+)\/modules\/custom\/*}');
       if (preg_match($regex, $filename)) {
         $res['custom'][$module] = array("version" => $module_info->info['version']);
