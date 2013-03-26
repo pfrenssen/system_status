@@ -34,4 +34,5 @@ After installation go to the admin page under
 (The default entered IP address should work fine)
 
 Once you saved the settings you should be able to: 
-GET $base_url/system/status  (ex. http://www.my-site.com/system/status ) 
+GET $base_url/admin/reports/system_status  
+(ex. http://www.my-site.com/admin/reports/system_status ) 
