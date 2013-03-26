@@ -28,6 +28,7 @@ function system_status_menu() {
     'page callback' => 'system_status_status_page',
     'access callback' => 'system_status_access_callback',
   );
+
   $items['admin/config/system/system_status'] = array(
     'title' => 'System Status',
     'description' => 'Configuration for System status module',
@@ -52,48 +53,68 @@ function system_status_form($form, &$form_state) {
     '#title' => t('Allow calls from DrupalStatus.org'),
     '#default_value' => variable_get('form_service_allow_drupalstatus', '0'),
   );
+
   $form['form_public_allow_public'] = array(
     '#description' => t('Allow calls from ip-adresses as defined below. Please note that they should be comma separated.'),
     '#type' => 'checkbox',
     '#title' => t('Allow public calls'),
     '#default_value' => variable_get('form_public_allow_public', '0'),
   );
+
   $form['form_public_allow_ips'] = array(
     '#type' => 'textfield',
     '#title' => t('Comma seperated list of allowed IP addresses'),
     '#default_value' => variable_get('form_public_allow_ips', '127.0.0.1,::1'),
-    '#access' => variable_get('form_public_allow_public', '0'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="form_public_allow_public"]' => array('checked' => TRUE),
+      ),
+    ),
   );
+
   $form['form_do_match_core'] = array(
     '#description' => t('Scan for core modules.'),
     '#type' => 'checkbox',
     '#title' => t('Enable core modules'),
     '#default_value' => variable_get('form_do_match_core', '1'),
   );
+
   $form['form_do_match_contrib'] = array(
     '#description' => t('Scan for contrib modules using a regular expression.'),
     '#type' => 'checkbox',
     '#title' => t('Enable contrib modules'),
     '#default_value' => variable_get('form_do_match_contrib', '1'),
   );
+
   $form['form_preg_match_contrib'] = array(
     '#type' => 'textfield',
     '#title' => t('Regular expression to match contrib modules'),
     '#default_value' => variable_get('form_preg_match_contrib', '{^sites\/([A-z,\.,\-]+)\/modules\/contrib\/*}'),
-    '#access' => variable_get('form_do_match_contrib', '1'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="form_do_match_contrib"]' => array('checked' => TRUE),
+      ),
+    ),
   );
+
   $form['form_do_match_custom'] = array(
     '#description' => t('Scan for custom modules using a regular expression.'),
     '#type' => 'checkbox',
     '#title' => t('Enable custom modules'),
     '#default_value' => variable_get('form_do_match_custom', '0'),
   );
+
   $form['form_preg_match_custom'] = array(
     '#type' => 'textfield',
     '#title' => t('Regular expression to match custom modules'),
     '#default_value' => variable_get('form_preg_match_custom', '{^sites\/([A-z,\.,\-]+)\/modules\/custom\/*}'),
-    '#access' => variable_get('form_do_match_custom', '0'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="form_do_match_custom"]' => array('checked' => TRUE),
+      ),
+    ),
   );
+
   return system_settings_form($form);
 }
 
