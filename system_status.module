@@ -25,10 +25,11 @@ function system_status_menu() {
   $items = array();
 
   $items['admin/reports/system_status'] = array(
-    'page callback' => 'system_status_status_page',
-    'access callback' => 'system_status_access_callback',
     'title' => 'System Status',
     'description' => 'Output of the System status module',
+    'access callback' => 'system_status_access_callback',
+    'page callback' => 'system_status_status_page',
+    'file' => 'system_status_status_page.inc'
   );
 
   $items['admin/config/system/system_status'] = array(
@@ -41,6 +42,47 @@ function system_status_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Access callback: Check ip.
+ * 
+ * @see system_status_menu()
+ */
+function system_status_access_callback() {
+  if (variable_get('form_service_allow_drupalstatus', 0) == 1) {
+    // For services ranges can be used ..
+    if (system_status_match_cidr(ip_address(), "91.212.186.0/24")) {
+      return TRUE;
+    }
+  }
+
+  if (variable_get('form_public_allow_public', 1) == 1) {
+    // I took the easy way out here since i didn't want
+    // to bother writing something to match v6 subnets.
+    $allowed_ips = explode(',', variable_get('form_public_allow_ips', '127.0.0.1,::1'));
+    foreach ($allowed_ips as &$address) {
+      if (ip_address() === $address) {
+        return TRUE;
+      }
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Check if an IP adress matches a CIDR range.
+ * @example
+ * match_cidr("192.168.0.1","192.168.0.0/16");
+ */
+function system_status_match_cidr($ip_address, $range) {
+  list ($subnet, $bits) = explode('/', $range);
+  $ip_address = ip2long($ip_address);
+  $subnet = ip2long($subnet);
+  $mask = -1 << (32 - $bits);
+  // In case the supplied subnet wasn't correctly aligned.
+  $subnet &= $mask;
+  return ($ip_address & $mask) == $subnet;
 }
 
 /**
@@ -141,104 +183,4 @@ function system_status_form($form, &$form_state) {
   return system_settings_form($form);
 }
 
-/**
- * Access callback: Check ip.
- * 
- * @see system_status_menu()
- */
-function system_status_access_callback() {
-  if (variable_get('form_service_allow_drupalstatus', 0) == 1) {
-    // For services ranges can be used ..
-    if (system_status_match_cidr(ip_address(), "91.212.186.0/24")) {
-      return TRUE;
-    }
-  }
 
-  if (variable_get('form_public_allow_public', 1) == 1) {
-    // I took the easy way out here since i didn't want
-    // to bother writing something to match v6 subnets.
-    $allowed_ips = explode(',', variable_get('form_public_allow_ips', '127.0.0.1,::1'));
-    foreach ($allowed_ips as &$address) {
-      if (ip_address() === $address) {
-        return TRUE;
-      }
-    }
-  }
-  return FALSE;
-}
-
-/**
- * Check if an IP adress matches a CIDR range.
- * @example
- * match_cidr("192.168.0.1","192.168.0.0/16");
- */
-function system_status_match_cidr($ip_address, $range) {
-  list ($subnet, $bits) = explode('/', $range);
-  $ip_address = ip2long($ip_address);
-  $subnet = ip2long($subnet);
-  $mask = -1 << (32 - $bits);
-  // In case the supplied subnet wasn't correctly aligned.
-  $subnet &= $mask;
-  return ($ip_address & $mask) == $subnet;
-}
-
-/**
- * Return JSON formatted module information.
- */
-function system_status_status_page() {
-  $system_modules = system_list('module_enabled');
-
-  // Needless initialisation, but hey.
-  $res = array(
-    "core" => array(),
-    "contrib" => array(),
-    "custom" => array(),
-  );
-
-  foreach ($system_modules as $module => $module_info) {
-    $filename = $module_info->filename;
-
-    // Match for custom modules.
-    if (variable_get('form_do_match_custom', '0')) {
-      $regex = variable_get('form_preg_match_custom', '{^sites\/([A-z,\.,\-]+)\/modules\/custom\/*}');
-      if (preg_match($regex, $filename)) {
-        $res['custom'][$module] = array("version" => $module_info->info['version']);
-      }
-    }
-    else {
-      $res['custom'] = "disabled";
-    }
-
-    // Match for contrib modules.
-    if (variable_get('form_do_match_contrib', '1')) {
-      if (variable_get('form_match_contrib_mode', 0) == 0) {
-        $regex = '{^sites\/([A-z,\.,\-]+)\/modules\/*}';
-      }
-      elseif (variable_get('form_match_contrib_mode', 0) == 1) {
-        $regex = '{^sites\/([A-z,\.,\-]+)\/modules\/contrib\/*}';
-      }
-      else {
-        $regex = variable_get('form_preg_match_contrib', '{^sites\/([A-z,\.,\-]+)\/modules\/contrib\/*}');
-      }
-
-      if (preg_match($regex, $filename)) {
-        $res['contrib'][$module] = array("version" => $module_info->info['version']);
-      }
-    }
-    else {
-      $res['contrib'] = "disabled";
-    }
-
-    // Core modules.
-    if (variable_get('form_do_match_core', '1')) {
-      if (strtolower($module_info->info['package']) == "core") {
-        $res['core'][$module] = array("version" => $module_info->info['version']);
-      }
-    }
-    else {
-      $res['core'] = "disabled";
-    }
-  }
-
-  echo drupal_json_encode(array("system_status" => $res));
-}
