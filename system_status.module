@@ -24,9 +24,11 @@ function system_status_help($path, $arg) {
 function system_status_menu() {
   $items = array();
 
-  $items['system/status'] = array(
+  $items['admin/reports/system_status'] = array(
     'page callback' => 'system_status_status_page',
     'access callback' => 'system_status_access_callback',
+    'title' => 'System Status',
+    'description' => 'Output of the System status module',
   );
 
   $items['admin/config/system/system_status'] = array(
