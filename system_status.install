@@ -1,13 +1,14 @@
 <?php
 /**
- * @file system_status.install
+ * @file
+ * Clean up file for system_status
  */
 
 /**
  * Implements hook_uninstall().
  *
  * Removes all settings used by the module.
- */ 
+ */
 function system_status_uninstall() {
   variable_del('form_service_allow_drupalstatus');
   variable_del('form_public_allow_public');
