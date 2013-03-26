@@ -181,7 +181,8 @@ function system_status_status_page() {
       if (preg_match($regex, $filename)) {
         $res['custom'][$module] = array("version" => $module_info->info['version']);
       }
-    } else {
+    } 
+    else {
       $res['custom'] = "disabled";
     }
 
@@ -191,7 +192,8 @@ function system_status_status_page() {
       if (preg_match($regex, $filename)) {
         $res['contrib'][$module] = array("version" => $module_info->info['version']);
       }
-    } else {
+    } 
+    else {
       $res['contrib'] = "disabled";
     }
 
@@ -200,7 +202,8 @@ function system_status_status_page() {
       if (strtolower($module_info->info['package']) == "core") {
         $res['core'][$module] = array("version" => $module_info->info['version']);
       }
-    } else {
+    } 
+    else {
       $res['core'] = "disabled";
     }
   }
