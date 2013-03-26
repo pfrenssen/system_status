@@ -62,5 +62,5 @@ function system_status_status_page() {
     }
   }
 
-  echo drupal_json_encode(array("system_status" => $res));
+  drupal_json_output(array("system_status" => $res));
 }
