@@ -10,13 +10,13 @@
  * Removes all settings used by the module.
  */
 function system_status_uninstall() {
-  variable_del('form_service_allow_drupalstatus');
-  variable_del('form_public_allow_public');
-  variable_del('form_public_allow_ips');
-  variable_del('form_do_match_core');
-  variable_del('form_do_match_contrib');
-  variable_del('form_match_contrib_mode');
-  variable_del('form_preg_match_contrib');
-  variable_del('form_do_match_custom');
-  variable_del('form_preg_match_custom');
+  variable_del('system_status_service_allow_drupalstatus');
+  variable_del('system_status_public_allow_public');
+  variable_del('system_status_public_allow_ips');
+  variable_del('system_status_do_match_core');
+  variable_del('system_status_do_match_contrib');
+  variable_del('system_status_match_contrib_mode');
+  variable_del('system_status_preg_match_contrib');
+  variable_del('system_status_do_match_custom');
+  variable_del('system_status_preg_match_custom');
 }

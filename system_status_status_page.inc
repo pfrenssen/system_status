@@ -21,8 +21,8 @@ function system_status_status_page() {
     $filename = $module_info->filename;
 
     // Match for custom modules.
-    if (variable_get('form_do_match_custom', '0')) {
-      $regex = variable_get('form_preg_match_custom', '{^sites\/([A-z,\.,\-]+)\/modules\/custom\/*}');
+    if (variable_get('system_status_do_match_custom', '0')) {
+      $regex = variable_get('system_status_preg_match_custom', '{^sites\/([A-z,\.,\-]+)\/modules\/custom\/*}');
       if (preg_match($regex, $filename)) {
         $res['custom'][$module] = array("version" => $module_info->info['version']);
       }
@@ -32,15 +32,15 @@ function system_status_status_page() {
     }
 
     // Match for contrib modules.
-    if (variable_get('form_do_match_contrib', '1')) {
-      if (variable_get('form_match_contrib_mode', 0) == 0) {
+    if (variable_get('system_status_do_match_contrib', '1')) {
+      if (variable_get('system_status_match_contrib_mode', 0) == 0) {
         $regex = '{^sites\/([A-z,\.,\-]+)\/modules\/*}';
       }
-      elseif (variable_get('form_match_contrib_mode', 0) == 1) {
+      elseif (variable_get('system_status_match_contrib_mode', 0) == 1) {
         $regex = '{^sites\/([A-z,\.,\-]+)\/modules\/contrib\/*}';
       }
       else {
-        $regex = variable_get('form_preg_match_contrib', '{^sites\/([A-z,\.,\-]+)\/modules\/contrib\/*}');
+        $regex = variable_get('system_status_preg_match_contrib', '{^sites\/([A-z,\.,\-]+)\/modules\/contrib\/*}');
       }
 
       if (preg_match($regex, $filename)) {
@@ -52,7 +52,7 @@ function system_status_status_page() {
     }
 
     // Core modules.
-    if (variable_get('form_do_match_core', '1')) {
+    if (variable_get('system_status_do_match_core', '1')) {
       if (strtolower($module_info->info['package']) == "core") {
         $res['core'][$module] = array("version" => $module_info->info['version']);
       }
