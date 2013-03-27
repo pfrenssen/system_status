@@ -29,7 +29,7 @@ function system_status_menu() {
     'description' => 'Output of the System status module',
     'access callback' => 'system_status_access_callback',
     'page callback' => 'system_status_status_page',
-    'file' => 'system_status_status_page.inc',
+    'file' => 'system_status_status.page.inc',
   );
 
   $items['admin/config/system/system_status'] = array(
@@ -37,7 +37,7 @@ function system_status_menu() {
     'description' => 'Configuration for System status module',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('system_status_form'),
-    'file' => 'system_status_admin.inc',
+    'file' => 'system_status.admin.inc',
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
   );
