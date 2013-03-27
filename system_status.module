@@ -46,7 +46,7 @@ function system_status_menu() {
 }
 
 /**
- * Access callback: Check ip.
+ * Access callback: Check authorized IP.
  * 
  * @see system_status_menu()
  */
@@ -54,8 +54,7 @@ function system_status_access_callback() {
   $ip_address = ip_address();
 
   if (variable_get('system_status_service_allow_drupalstatus', 0) == 1) {
-    // For services ranges can be used ..
-    if (system_status_match_cidr($ip_address, "91.212.186.0/24")) {
+    if ($ip_address == gethostbyname("status.drupalstatus.org")) {
       return TRUE;
     }
   }
@@ -75,17 +74,3 @@ function system_status_access_callback() {
   return FALSE;
 }
 
-/**
- * Check if an IP adress matches a CIDR range.
- * @example
- * match_cidr("192.168.0.1","192.168.0.0/16");
- */
-function system_status_match_cidr($ip_address, $range) {
-  list ($subnet, $bits) = explode('/', $range);
-  $ip_address = ip2long($ip_address);
-  $subnet = ip2long($subnet);
-  $mask = -1 << (32 - $bits);
-  // In case the supplied subnet wasn't correctly aligned.
-  $subnet &= $mask;
-  return ($ip_address & $mask) == $subnet;
-}
