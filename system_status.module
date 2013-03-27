@@ -73,4 +73,3 @@ function system_status_access_callback() {
 
   return FALSE;
 }
-
