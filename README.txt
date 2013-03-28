@@ -19,8 +19,8 @@ None.
 
 -- INSTALLATION --
 
-Project URL: http://drupal.org/sandbox/MrSam/1947996
-GitURL: git clone http://git.drupal.org/sandbox/MrSam/1947996.git system_status
+Project URL: http://drupal.org/project/SystemStatus/
+GitURL: git clone http://git.drupal.org:project/SystemStatus.git
 Version: 7.x-1.x
 
 Download and install the module normally as you would install other 
