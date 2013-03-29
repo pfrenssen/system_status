@@ -51,7 +51,7 @@ function system_status_menu() {
  * 
  * @see system_status_menu()
  */
-function system_status_access_callback($token = false) {
+function system_status_access_callback($token = FALSE) {
 
   if ((variable_get('system_status_need_protect_token', 0) == 1 || variable_get('system_status_service_allow_drupalstatus', 0) == 1) && $token !== variable_get('system_status_token', "")) {
     return FALSE;

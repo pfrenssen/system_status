@@ -6,24 +6,32 @@
 
 class SystemStatusEncryption {
 
+/**
+ * System Status: create a new token.
+ *
+ */
   public static function getToken() {
     $chars = array_merge(range(0, 9),
       range('a', 'z'),
       range('A', 'Z'),
-      range(0,99));
+      range(0, 99));
 
     shuffle($chars);
 
     $token = "";
-    for($i=0; $i<8; $i++) {
+    for($i = 0; $i < 8; $i++) {
       $token .= $chars[$i];
     }
 
     return $token;
   }
 
+/**
+ * System Status: encrypt a plaintext message.
+ *
+ */
   public static function encrypt($plaintext) {
-    $key = hash("SHA256", variable_get('system_status_encrypt_token','Error-no-token'), TRUE);
+    $key = hash("SHA256", variable_get('system_status_encrypt_token', 'Error-no-token'), TRUE);
 
     $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
     $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);

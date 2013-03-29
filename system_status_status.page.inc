@@ -65,7 +65,8 @@ function system_status_status_page() {
   if (variable_get('system_status_need_encryption', 0) == 1) {
     $res = SystemStatusEncryption::encrypt(drupal_json_encode(array("system_status" => $res)));
     drupal_json_output(array("system_status" => "encrypted", "data" => $res));
-  } else {
+  }
+  else {
     drupal_json_output(array("system_status" => $res));
   }
 }

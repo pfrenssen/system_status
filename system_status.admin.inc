@@ -40,7 +40,7 @@ function system_status_form($form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Protect all calls using a unique token'),
     '#description' => t('Require that a code is passed to the url to view the JSON ouput. You need the following private key to open the page: @token',
-      array("@token" => variable_get('system_status_token','Error-no-token'))),
+      array("@token" => variable_get('system_status_token', 'Error-no-token'))),
     '#default_value' => variable_get('system_status_need_protect_token', 0),
     '#states' => array(
       'disabled' => array(
@@ -50,7 +50,7 @@ function system_status_form($form, &$form_state) {
         array(':input[name="system_status_need_protect_token"]' => array('checked' => TRUE)),
         array(':input[name="system_status_service_allow_drupalstatus"]' => array('checked' => TRUE)),
       ),
-     ),
+    ),
   );
 
   $form['system_status_need_encryption'] = array(
@@ -67,7 +67,7 @@ function system_status_form($form, &$form_state) {
         array(':input[name="system_status_need_encryption"]' => array('checked' => TRUE)),
         array(':input[name="system_status_service_allow_drupalstatus"]' => array('checked' => TRUE)),
       ),
-     ),
+    ),
   );
 
   $form['system_status_do_match_core'] = array(
