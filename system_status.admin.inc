@@ -12,9 +12,9 @@
 function system_status_form($form, &$form_state) {
 
   $form['system_status_public_allow_public'] = array(
-    '#description' => t('Allow calls from ip-adresses as defined below. Please note that they should be comma separated.'),
     '#type' => 'checkbox',
     '#title' => t('Allow public calls'),
+    '#description' => t('Allow calls from ip-adresses as defined below. Please note that they should be comma separated.'),
     '#default_value' => variable_get('system_status_public_allow_public', '1'),
   );
 
@@ -30,16 +30,17 @@ function system_status_form($form, &$form_state) {
   );
 
   $form['system_status_service_allow_drupalstatus'] = array(
-    '#description' => t('Allow calls from the servers at http://www.drupalstatus.org and all of their ip ranges.'),
     '#type' => 'checkbox',
     '#title' => t('Allow calls from DrupalStatus.org'),
+    '#description' => t('Allow calls from the servers at http://www.drupalstatus.org and all of their ip ranges.'),
     '#default_value' => variable_get('system_status_service_allow_drupalstatus', '0'),
   );
 
   $form['system_status_need_protect_token'] = array(
-    '#description' => t('Selecting this option will make accessing the report page more secure, but disables the link from the admin menu.'),
     '#type' => 'checkbox',
-    '#title' => t('Protect all calls using a unique token: (@token)',array("@token" => variable_get('system_status_token','Error-no-token'))),
+    '#title' => t('Protect all calls using a unique token'),
+    '#description' => t('Require that a code is passed to the url to view the JSON ouput. You need the following private key to open the page: @token',
+      array("@token" => variable_get('system_status_token','Error-no-token'))),
     '#default_value' => variable_get('system_status_need_protect_token', 0),
     '#states' => array(
       'disabled' => array(
@@ -52,17 +53,34 @@ function system_status_form($form, &$form_state) {
      ),
   );
 
+  $form['system_status_need_encryption'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Protect all calls using encryption'),
+    '#description' => t('Selecting this option will encrypt all output, rendering the data useless for hackers during a man-in-the-middle attack. You need the following private key to decode the message: @encrypt_token ',
+      array("@encrypt_token" => variable_get("system_status_encrypt_token", 'Error-no-token'))),
+    '#default_value' => variable_get('system_status_need_encryption', 0),
+    '#states' => array(
+      'disabled' => array(
+        ':input[name="system_status_service_allow_drupalstatus"]' => array('checked' => TRUE),
+      ),
+      'checked' => array(
+        array(':input[name="system_status_need_encryption"]' => array('checked' => TRUE)),
+        array(':input[name="system_status_service_allow_drupalstatus"]' => array('checked' => TRUE)),
+      ),
+     ),
+  );
+
   $form['system_status_do_match_core'] = array(
-    '#description' => t('Scan for core modules.'),
     '#type' => 'checkbox',
     '#title' => t('Enable core modules'),
+    '#description' => t('Scan for core modules.'),
     '#default_value' => variable_get('system_status_do_match_core', '1'),
   );
 
   $form['system_status_do_match_contrib'] = array(
-    '#description' => t('Scan for contrib modules.'),
     '#type' => 'checkbox',
     '#title' => t('Enable contrib modules'),
+    '#description' => t('Scan for contrib modules.'),
     '#default_value' => variable_get('system_status_do_match_contrib', '1'),
   );
 

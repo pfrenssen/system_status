@@ -21,15 +21,18 @@ function system_status_uninstall() {
   variable_del('system_status_preg_match_custom');
   variable_del('system_status_token');
   variable_del('system_status_need_protect_token');
+  variable_del('system_status_need_encryption');
+  variable_del('system_status_encrypt_token');
 }
 
 /**
  * Implements hook_install().
  *
- * Creates a unique token for this installation.
+ * Creates a unique set of tokens for this installation.
  */
 function system_status_install() {
   variable_set('system_status_token',SystemStatusEncryption::getToken());
+  variable_set('system_status_encrypt_token',SystemStatusEncryption::getToken());
 }
 
 /**
@@ -40,5 +43,9 @@ function system_status_install() {
 function system_status_update_7200() {
   if (variable_get('system_status_token',0) === 0) {
     variable_set('system_status_token',SystemStatusEncryption::getToken());
+  }
+
+  if (variable_get('system_status_encrypt_token',0) === 0) {
+    variable_set('system_status_encrypt_token',SystemStatusEncryption::getToken());
   }
 }

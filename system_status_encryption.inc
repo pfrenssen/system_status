@@ -21,4 +21,20 @@ class SystemStatusEncryption {
 
     return $token;
   }
+
+  public static function encrypt($plaintext) {
+    $key = hash("SHA256", variable_get('system_status_encrypt_token','Error-no-token'), TRUE);
+
+    $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+
+    $plaintext_utf8 = utf8_encode($plaintext);
+
+    $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $plaintext_utf8, MCRYPT_MODE_CBC, $iv);
+
+    $ciphertext = $iv . $ciphertext;
+
+    return base64_encode($ciphertext);
+  }
+
 }

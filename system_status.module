@@ -53,7 +53,7 @@ function system_status_menu() {
  */
 function system_status_access_callback($token = false) {
 
-  if ((variable_get('system_status_need_protect_token',0) == 1 || variable_get('system_status_service_allow_drupalstatus',0) == 1) && $token !== variable_get('system_status_token', "")) {
+  if ((variable_get('system_status_need_protect_token', 0) == 1 || variable_get('system_status_service_allow_drupalstatus', 0) == 1) && $token !== variable_get('system_status_token', "")) {
     return FALSE;
   }
 
