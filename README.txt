@@ -19,9 +19,8 @@ None.
 
 -- INSTALLATION --
 
-Project URL: http://drupal.org/project/SystemStatus/
-GitURL: git clone http://git.drupal.org:project/SystemStatus.git
-Version: 7.x-1.x
+Project URL: http://drupal.org/project/system_status/
+GitURL: git clone http://git.drupal.org:project/system_status.git
 
 Download and install the module normally as you would install other 
 contributed module.
