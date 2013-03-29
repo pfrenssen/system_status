@@ -36,6 +36,22 @@ function system_status_form($form, &$form_state) {
     '#default_value' => variable_get('system_status_service_allow_drupalstatus', '0'),
   );
 
+  $form['system_status_need_protect_token'] = array(
+    '#description' => t('Selecting this option will make accessing the report page more secure, but disables the link from the admin menu.'),
+    '#type' => 'checkbox',
+    '#title' => t('Protect all calls using a unique token: (@token)',array("@token" => variable_get('system_status_token','Error-no-token'))),
+    '#default_value' => variable_get('system_status_need_protect_token', 0),
+    '#states' => array(
+      'disabled' => array(
+        ':input[name="system_status_service_allow_drupalstatus"]' => array('checked' => TRUE),
+      ),
+      'checked' => array(
+        array(':input[name="system_status_need_protect_token"]' => array('checked' => TRUE)),
+        array(':input[name="system_status_service_allow_drupalstatus"]' => array('checked' => TRUE)),
+      ),
+     ),
+  );
+
   $form['system_status_do_match_core'] = array(
     '#description' => t('Scan for core modules.'),
     '#type' => 'checkbox',

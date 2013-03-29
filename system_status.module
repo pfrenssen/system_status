@@ -28,6 +28,7 @@ function system_status_menu() {
     'title' => 'System Status',
     'description' => 'Output of the System status module',
     'access callback' => 'system_status_access_callback',
+    'access arguments' => array(3),
     'page callback' => 'system_status_status_page',
     'file' => 'system_status_status.page.inc',
   );
@@ -50,7 +51,12 @@ function system_status_menu() {
  * 
  * @see system_status_menu()
  */
-function system_status_access_callback() {
+function system_status_access_callback($token = false) {
+
+  if ((variable_get('system_status_need_protect_token',0) == 1 || variable_get('system_status_service_allow_drupalstatus',0) == 1) && $token !== variable_get('system_status_token', "")) {
+    return FALSE;
+  }
+
   $ip_address = ip_address();
 
   if (variable_get('system_status_service_allow_drupalstatus', 0) == 1) {
