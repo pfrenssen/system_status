@@ -24,7 +24,13 @@ function system_status_status_page() {
     if (variable_get('system_status_do_match_custom', '0')) {
       $regex = variable_get('system_status_preg_match_custom', '{^sites\/([A-z,\.,\-]+)\/modules\/custom\/*}');
       if (preg_match($regex, $filename)) {
-        $res['custom'][$module] = array("version" => $module_info->info['version']);
+        // if this is part of a project, only set the project.
+        if(isset($module_info->info['project'])) {
+          $res['custom'][$module_info->info['project']] = array("version" => $module_info->info['version']);
+        }
+        else {
+          $res['custom'][$module] = array("version" => $module_info->info['version']);
+        }
       }
     }
     else {
@@ -44,7 +50,13 @@ function system_status_status_page() {
       }
 
       if (preg_match($regex, $filename)) {
-        $res['contrib'][$module] = array("version" => $module_info->info['version']);
+        // if this is part of a project, only set the project.
+        if(isset($module_info->info['project'])) {
+          $res['contrib'][$module_info->info['project']] = array("version" => $module_info->info['version']);
+        }
+        else {
+          $res['contrib'][$module] = array("version" => $module_info->info['version']);
+        }
       }
     }
     else {
@@ -54,7 +66,13 @@ function system_status_status_page() {
     // Core modules.
     if (variable_get('system_status_do_match_core', '1')) {
       if (strtolower($module_info->info['package']) == "core") {
-        $res['core'][$module] = array("version" => $module_info->info['version']);
+        // if this is part of a project, only set the project.
+        if(isset($module_info->info['project'])) {
+          $res['core'][$module_info->info['project']] = array("version" => $module_info->info['version']);
+        }
+        else {
+          $res['core'][$module] = array("version" => $module_info->info['version']);
+        }
       }
     }
     else {
