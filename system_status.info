@@ -1,5 +1,5 @@
 name = System Status
-description = "A module that provides the functionality to remote check on the health of your site and modules."
+description = "Create a reports page that can be read by DrupalStatus or other services."
 core = 7.x
 configure = admin/config/system/system_status
 files[] = system_status_encryption.inc

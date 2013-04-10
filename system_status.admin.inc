@@ -11,11 +11,13 @@
  */
 function system_status_form($form, &$form_state) {
 
-  $form['system_status_public_allow_public'] = array(
+/* I disabled other access methods for now. Since the primary focus will be DrupalStatus.
+ * Documentation will be added to the README on how to activate this manually.
+ * $form['system_status_public_allow_public'] = array(
     '#type' => 'checkbox',
     '#title' => t('Allow public calls'),
     '#description' => t('Allow calls from ip-adresses as defined below. Please note that they should be comma separated.'),
-    '#default_value' => variable_get('system_status_public_allow_public', '1'),
+    '#default_value' => variable_get('system_status_public_allow_public', '0'),
   );
 
   $form['system_status_public_allow_ips'] = array(
@@ -28,14 +30,21 @@ function system_status_form($form, &$form_state) {
       ),
     ),
   );
-
+*/
   $form['system_status_service_allow_drupalstatus'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Allow calls from DrupalStatus.org'),
-    '#description' => t('Allow calls from the servers at http://www.drupalstatus.org and all of their ip ranges.'),
-    '#default_value' => variable_get('system_status_service_allow_drupalstatus', '0'),
+    '#title' => t('Allow reporting to DrupalStatus'),
+    '#description' => t('Allow reports to be generated for DrupalStatus. These reports will be send and stored using encryption and are only accessible using your account.'),
+    '#default_value' => variable_get('system_status_service_allow_drupalstatus', '1'),
   );
 
+  $form['add_site'] = array(
+    '#type' => 'submit',
+    '#value' => t('Add this site to your account'),
+    '#submit' => array('system_status_add_site'),
+  );
+
+/*
   $form['system_status_need_protect_token'] = array(
     '#type' => 'checkbox',
     '#title' => t('Protect all calls using a unique token'),
@@ -69,24 +78,25 @@ function system_status_form($form, &$form_state) {
       ),
     ),
   );
-
+*/
   $form['system_status_do_match_core'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Enable core modules'),
-    '#description' => t('Scan for core modules.'),
+    '#title' => t('Report core modules'),
+    '#description' => t('Include core modules and their versions in the report. You will need this if you want to check on your Drupal version.'),
     '#default_value' => variable_get('system_status_do_match_core', '1'),
   );
 
   $form['system_status_do_match_contrib'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Enable contrib modules'),
-    '#description' => t('Scan for contrib modules.'),
+    '#title' => t('Report contrib modules'),
+    '#description' => t('Include contrib modules and their versions in the report. You will need this if you want the report to include information about all of your modules used.'),
     '#default_value' => variable_get('system_status_do_match_contrib', '1'),
   );
 
   $form['system_status_match_contrib_mode'] = array(
     '#type' => 'radios',
     '#title' => t('Where are your contrib modules stored ?'),
+    '#description' => t('When unsure, leave this option as set.'),
     '#default_value' => variable_get('system_status_match_contrib_mode', 0),
     '#options' => array(
       0 => 'sites/*/modules/',
@@ -113,7 +123,7 @@ function system_status_form($form, &$form_state) {
   $form['system_status_do_match_custom'] = array(
     '#description' => t('Scan for custom modules using a regular expression.'),
     '#type' => 'checkbox',
-    '#title' => t('Enable custom modules'),
+    '#title' => t('Report custom modules'),
     '#default_value' => variable_get('system_status_do_match_custom', '0'),
     '#states' => array(
       'visible' => array(
@@ -134,4 +144,13 @@ function system_status_form($form, &$form_state) {
   );
 
   return system_settings_form($form);
+}
+
+function system_status_add_site($form, &$form_state) {
+  global $base_url;
+  $siteUrl = urlencode($base_url);
+  $siteUrl .= "|" . variable_get('system_status_token', 'Error-no-token');
+  $siteUrl .= "|" . variable_get('system_status_encrypt_token', 'Error-no-token');
+
+  $form_state['redirect'] = "http://www.drupalstatus.org/?op=addSite&siteUrl=$siteUrl";
 }
