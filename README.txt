@@ -1,37 +1,48 @@
-
 -- SUMMARY --
 
-System Status is a very lightweight module that gives a simple overview of
-current used modules and their version. This would allow administrators to
-build their own monitoring interface to check on multiple installations at 
-once.
+System Status provides an easy way to get an overview of all the available
+updates for your Drupal websites. Install System Status on all your Drupal
+websites and allow reporting to DrupalStatus.org for a centralized overview
+and email summaries of available updates and installed versions.
 
-This module will NOT check for updates.
+The accompanying service offered by DrupalStatus.org is free, but if you do not
+want to use this service this lightweight module allows you to build your own
+overviews and dashboard.
+The idea is to offer a way to script something that can poll all of your sites
+to check on modules and versions used, instead of having every Drupal site
+check for updates separately (and using Update Manager.
+This can be very useful in situations where you do not want to trust on the
+update manager, or where your servers might not have the needed access to
+check for updates.
 
-In time this module will not only serve 'pull' request but will also have 
-the possibility to inform by itself using webcalls or syslog or ...
+The module allows administrators to build their own monitoring interface
+to check on multiple installations at once.
+
+This module WILL NOT check for updates. You will nead to create your own
+service or to use Drupalstatus.org to generate reports and overviews.
 
 
 -- REQUIREMENTS --
 
-None.
+PHP 5.2.5 or higher (5.3 recommended)
+mcrypt
 
 
 -- INSTALLATION --
 
 Project URL: http://drupal.org/project/system_status/
 GitURL: git clone http://git.drupal.org:project/system_status.git
+Download and install the module the same way you would download and
+install other contributed modules.
 
-Download and install the module normally as you would install other 
-contributed module.
+
+-- INSTALLATION USING DRUSH --
+
+drush dl system_status
+drush en system_status
 
 
 -- USAGE --
 
-After installation go to the admin page under 
-/admin/config/system/system_status and allow public calls. 
-(The default entered IP address should work fine)
-
-Once you saved the settings you should be able to: 
-GET $base_url/admin/reports/system_status  
-(ex. http://www.my-site.com/admin/reports/system_status ) 
+After installation go to the admin page under
+/admin/config/system/system_status and allow reporting to DrupalStatus.org.
