@@ -152,5 +152,5 @@ function system_status_add_site($form, &$form_state) {
   $siteUrl .= "|" . variable_get('system_status_token', 'Error-no-token');
   $siteUrl .= "|" . variable_get('system_status_encrypt_token', 'Error-no-token');
 
-  $form_state['redirect'] = "http://www.drupalstatus.org/?op=addSite&siteUrl=$siteUrl";
+  $form_state['redirect'] = "http://www.drupalstatus.org/addsite?op=addSite&siteUrl=$siteUrl";
 }
