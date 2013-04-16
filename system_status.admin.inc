@@ -153,7 +153,7 @@ function system_status_add_site($form, &$form_state) {
   $siteUrl .= "|" . variable_get('system_status_encrypt_token', 'Error-no-token');
   $url = "https://www.drupalstatus.org/addsite?op=addSite&siteUrl=$siteUrl";
 
-  if (module_exists('overlay')) {
+  if (module_exists('overlay') && overlay_get_mode() == 'child') {
     unset($_GET['destination']);
     overlay_close_dialog($url, array('external' => TRUE));
     $form_state['redirect'] = FALSE;
