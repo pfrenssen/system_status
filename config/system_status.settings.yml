@@ -1,0 +1,7 @@
+system_status_service_allow_drupalstatus:TRUE
+system_status_do_match_core: TRUE
+system_status_do_match_contrib: TRUE
+system_status_match_contrib_mode: FALSE
+system_status_preg_match_contrib: "{^sites\/([A-z,\.,\-]+)\/modules\/contrib\/*}"
+system_status_do_match_custom: FALSE
+system_status_preg_match_custom : "{^sites\/([A-z,\.,\-]+)\/modules\/custom\/*}"

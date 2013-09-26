@@ -3,6 +3,7 @@
  * @file
  * Encryption logic for system_status
  */
+namespace Drupal\system_status\Controller;
 
 class SystemStatusEncryption {
 

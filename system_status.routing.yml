@@ -1,0 +1,14 @@
+system_status.status_page:
+  path: '/admin/reports/system_status'
+  defaults:
+    _controller: '\Drupal\system_status\Controller\SystemStatusController::load'
+  requirements:
+    _permission: 'access content'
+
+system_status.admin_settings:
+  path: '/admin/config/system/system_status'
+  defaults:
+    _form: '\Drupal\system_status\Form\SystemStatusSettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
+
