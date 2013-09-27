@@ -60,24 +60,24 @@ function system_status_menu() {
 
 /**
  * Access callback: Check authorized IP.
- * 
+ *
  * @see system_status_menu()
  */
 function system_status_access_callback($token = FALSE) {
 
-  if ((variable_get('system_status_need_protect_token', 0) == 1 || variable_get('system_status_service_allow_drupalstatus', 1) == 1) && $token !== variable_get('system_status_token', "")) {
+  if (($config->get('system_status_need_protect_token') == 1 || $config->get('system_status_service_allow_drupalstatus') == 1) && $token !== $config->get('system_status_token')) {
     return FALSE;
   }
 
   $ip_address = Drupal::request()->getClientIp();
 
-  if (variable_get('system_status_service_allow_drupalstatus', 1) == 1) {
+  if ($config->get('system_status_service_allow_drupalstatus') == 1) {
     if ($ip_address == gethostbyname("status.drupalstatus.org")) {
       return TRUE;
     }
   }
 
-  if (variable_get('system_status_public_allow_public', 0) == 1) {
+  if ($config->get('system_status_public_allow_public') == 1) {
     // I took the easy way out here since i didn't want
     // to bother writing something to match v6 subnets.
     $allowed_ips = explode(',', variable_get('system_status_public_allow_ips', '127.0.0.1,::1'));
@@ -95,11 +95,11 @@ function system_status_access_callback($token = FALSE) {
 function system_status_add_site($form, &$form_state) {
   global $base_url;
   $siteUrl = urlencode($base_url);
-  $siteUrl .= "|" . variable_get('system_status_token', 'Error-no-token');
-  $siteUrl .= "|" . variable_get('system_status_encrypt_token', 'Error-no-token');
+  $siteUrl .= "|" . $config->get('system_status_token');
+  $siteUrl .= "|" . $config->get('system_status_encrypt_token');
   $url = "https://www.drupalstatus.org/addsite?op=addSite&siteUrl=$siteUrl";
 
-  if (module_exists('overlay') && overlay_get_mode() == 'child') {
+  if (Drupal::moduleHandler()->moduleExists('overlay') && overlay_get_mode() == 'child') {
     unset($_GET['destination']);
     overlay_close_dialog($url, array('external' => TRUE));
     $form_state['redirect'] = FALSE;
