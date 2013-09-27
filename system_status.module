@@ -80,7 +80,7 @@ function system_status_access_callback($token = FALSE) {
   if ($config->get('system_status_public_allow_public') == 1) {
     // I took the easy way out here since i didn't want
     // to bother writing something to match v6 subnets.
-    $allowed_ips = explode(',', variable_get('system_status_public_allow_ips', '127.0.0.1,::1'));
+    $allowed_ips = explode(',', $config->get(('system_status_public_allow_ips'));
 
     foreach ($allowed_ips as &$address) {
       if ($ip_address === $address) {

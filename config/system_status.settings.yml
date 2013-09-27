@@ -12,3 +12,4 @@ system_status_public_allow_public: 0
 system_status_need_protect_token: 0
 system_status_service_allow_drupalstatus: 1
 system_status_token: ''
+system_status_public_allow_ips: "127.0.0.1,::1"
