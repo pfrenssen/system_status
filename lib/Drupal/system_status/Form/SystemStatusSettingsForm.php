@@ -124,6 +124,7 @@ class SystemStatusSettingsForm extends ConfigFormBase {
       '#states' => array(
         'visible' => array(
           ':input[name="system_status_match_contrib_mode"]' => array('value' => 2),
+          ':input[name="system_status_match_contrib_mode"]' => array('value' => 1),
         ),
       ),
     );
