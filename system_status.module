@@ -34,24 +34,10 @@ function system_status_help($path, $arg) {
  */
 function system_status_menu() {
   $items = array();
-
-  $items['admin/reports/system_status'] = array(
-    'title' => 'System Status',
-    'description' => 'Output of the System status module',
-    'access callback' => 'system_status_access_callback',
-    'access arguments' => array(3),
-    'page callback' => 'system_status_status_page',
-    'file' => 'system_status_status.page.inc',
-    'type' => MENU_CALLBACK,
-  );
-
+  
   $items['admin/config/system/system_status'] = array(
     'title' => 'System Status',
     'description' => 'Configuration for System status module',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('system_status_form'),
-    'file' => 'system_status.admin.inc',
-    'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
   );
 
@@ -64,7 +50,7 @@ function system_status_menu() {
  * @see system_status_menu()
  */
 function system_status_access_callback($token = FALSE) {
-
+  $config = \Drupal::config('system_status.settings');
   if (($config->get('system_status_need_protect_token') == 1 || $config->get('system_status_service_allow_drupalstatus') == 1) && $token !== $config->get('system_status_token')) {
     return FALSE;
   }
@@ -80,7 +66,7 @@ function system_status_access_callback($token = FALSE) {
   if ($config->get('system_status_public_allow_public') == 1) {
     // I took the easy way out here since i didn't want
     // to bother writing something to match v6 subnets.
-    $allowed_ips = explode(',', $config->get(('system_status_public_allow_ips'));
+    $allowed_ips = explode(',', $config->get('system_status_public_allow_ips'));
 
     foreach ($allowed_ips as &$address) {
       if ($ip_address === $address) {

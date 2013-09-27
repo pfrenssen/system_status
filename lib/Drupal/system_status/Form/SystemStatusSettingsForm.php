@@ -95,8 +95,8 @@ class SystemStatusSettingsForm extends ConfigFormBase {
       '#description' => t('When unsure, leave this option as set.'),
       '#default_value' => $config->get('system_status_match_contrib_mode'),
       '#options' => array(
-        0 => 'sites/*/modules/',
-        1 => 'sites/*/modules/contrib/',
+        0 => 'modules/',
+        1 => 'modules/contrib/',
         2 => 'Other'),
       '#states' => array(
         'visible' => array(
