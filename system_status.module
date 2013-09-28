@@ -38,7 +38,8 @@ function system_status_menu() {
   $items['admin/config/system/system_status'] = array(
     'title' => 'System Status',
     'description' => 'Configuration for System status module',
-    'type' => MENU_NORMAL_ITEM,
+    'route_name' => 'system_status.admin_settings',
+    'type' => MENU_LOCAL_TASK | MENU_NORMAL_ITEM,
   );
 
   return $items;
