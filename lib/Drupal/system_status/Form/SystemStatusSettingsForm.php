@@ -121,12 +121,6 @@ class SystemStatusSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => t('Report custom modules'),
       '#default_value' => $config->get('system_status_do_match_custom'),
-      '#states' => array(
-        'visible' => array(
-          ':input[name="system_status_match_contrib_mode"]' => array('value' => 2),
-          ':input[name="system_status_match_contrib_mode"]' => array('value' => 1),
-        ),
-      ),
     );
 
     $form['system_status_preg_match_custom'] = array(
@@ -135,7 +129,7 @@ class SystemStatusSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('system_status_preg_match_custom'),
       '#states' => array(
         'visible' => array(
-          ':input[name="system_status_do_match_custom"]' => array('visible' => TRUE),
+          ':input[name="system_status_do_match_custom"]' => array('checked' => TRUE),
         ),
       ),
     );
@@ -157,7 +151,7 @@ class SystemStatusSettingsForm extends ConfigFormBase {
     $config->save();
     parent::submitForm($form, $form_state);
   }
-
+  
 
 
 }

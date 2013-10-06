@@ -81,6 +81,7 @@ function system_status_access_callback($token = FALSE) {
 
 function system_status_add_site($form, &$form_state) {
   global $base_url;
+  $config = \Drupal::config('system_status.settings');
   $siteUrl = urlencode($base_url);
   $siteUrl .= "|" . $config->get('system_status_token');
   $siteUrl .= "|" . $config->get('system_status_encrypt_token');
