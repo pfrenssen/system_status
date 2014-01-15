@@ -4,6 +4,8 @@
  * Clean up file for system_status
  */
 
+use Drupal\system_status\Controller\SystemStatusEncryption;
+
 /**
  * Implements hook_uninstall().
  *
