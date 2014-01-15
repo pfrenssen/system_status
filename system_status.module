@@ -50,6 +50,7 @@ function system_status_menu() {
  *
  * @see system_status_menu()
  */
+// TODOD* $request->attributes->get('_raw_variables')->get('system_status_token')
 function system_status_access_callback($token = FALSE) {
   $config = \Drupal::config('system_status.settings');
   if ($config->get('system_status_service_allow_drupalstatus') == 0 || $token !== $config->get('system_status_token')) {

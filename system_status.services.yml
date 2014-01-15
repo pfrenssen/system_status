@@ -1,0 +1,5 @@
+services:
+  access_check.system_status_page:
+    class: Drupal\system_status\Access\SystemStatusAccessCheck
+    tags:
+     - { name: access_check } 

@@ -1,9 +1,9 @@
 system_status.status_page:
-  path: '/admin/reports/system_status'
+  path: '/admin/reports/system_status/{system_status_token}'
   defaults:
     _controller: '\Drupal\system_status\Controller\SystemStatusController::load'
   requirements:
-    _permission: 'access content'
+   _access_system_status_page: 'TRUE'
 
 system_status.admin_settings:
   path: '/admin/config/system/system_status'
