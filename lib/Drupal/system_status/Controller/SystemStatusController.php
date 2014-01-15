@@ -101,10 +101,10 @@ class SystemStatusController extends ControllerBase {
 
     if (($config->get('system_status_need_encryption') == 1 || $config->get('system_status_service_allow_drupalstatus') == 1) && extension_loaded('mcrypt')) {
       $res = SystemStatusEncryption::encrypt(json_encode(array("system_status" => $res)));
-      return new JsonResponse(array("system_status" => "encrypted", "data" => $res));
+      return new JsonResponse(array("system_status" => "encrypted", "data" => $res, "drupal_version" => "8"));
     }
     else {
-      return new JsonResponse(array("system_status" => $res));
+      return new JsonResponse(array("system_status" => $res, "drupal_version" => "8"));
     }
   }
 
