@@ -40,64 +40,6 @@ class SystemStatusSettingsForm extends ConfigFormBase {
       '#submit' => array('system_status_add_site'),
     );
 
-    $form['system_status_do_match_core'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Report core modules'),
-      '#description' => t('Include core modules and their versions in your report. This option is required for reporting of your website\'s Drupal version and available updates.'),
-      '#default_value' => $config->get('system_status_do_match_core'),
-    );
-
-    $form['system_status_do_match_contrib'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Report contrib modules'),
-      '#description' => t('Include contrib modules and their versions in your report. This option is required for reporting of all your website\'s modules versions and available updates.'),
-      '#default_value' => $config->get('system_status_do_match_contrib'),
-    );
-
-    $form['system_status_match_contrib_mode'] = array(
-      '#type' => 'radios',
-      '#title' => t('Where are your contrib modules stored ?'),
-      '#description' => t('When unsure, leave this option as set.'),
-      '#default_value' => $config->get('system_status_match_contrib_mode'),
-      '#options' => array(
-        0 => 'modules/',
-        1 => 'modules/contrib/',
-        2 => 'Other'),
-      '#states' => array(
-        'visible' => array(
-          ':input[name="system_status_do_match_contrib"]' => array('checked' => TRUE),
-        ),
-      ),
-    );
-
-    $form['system_status_preg_match_contrib'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Regular expression to match contrib modules'),
-      '#default_value' => $config->get('system_status_preg_match_contrib'),
-      '#states' => array(
-        'visible' => array(
-          ':input[name="system_status_match_contrib_mode"]' => array('value' => 2),
-        ),
-      ),
-    );
-
-    $form['system_status_do_match_custom'] = array(
-      '#description' => t('Scan for custom modules using a regular expression.'),
-      '#type' => 'checkbox',
-      '#title' => t('Report custom modules'),
-      '#default_value' => $config->get('system_status_do_match_custom'),
-    );
-
-    $form['system_status_preg_match_custom'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Regular expression to match custom modules'),
-      '#default_value' => $config->get('system_status_preg_match_custom'),
-      '#states' => array(
-        'visible' => array(
-          ':input[name="system_status_do_match_custom"]' => array('checked' => TRUE),
-        ),
-      ),
-    );
     return parent::buildForm($form, $form_state);
   }
 
@@ -107,12 +49,6 @@ class SystemStatusSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, array &$form_state) {
     $config = $this->configFactory->get('system_status.settings');
     $config->set('system_status_service_allow_drupalstatus', $form_state['values']['system_status_service_allow_drupalstatus']);
-    $config->set('system_status_do_match_core', $form_state['values']['system_status_do_match_core']);
-    $config->set('system_status_do_match_contrib', $form_state['values']['system_status_do_match_contrib']);
-    $config->set('system_status_match_contrib_mode', $form_state['values']['system_status_match_contrib_mode']);
-    $config->set('system_status_preg_match_contrib', $form_state['values']['system_status_preg_match_contrib']);
-    $config->set('system_status_do_match_custom', $form_state['values']['system_status_do_match_custom']);
-    $config->set('system_status_preg_match_custom', $form_state['values']['system_status_preg_match_custom']);
     $config->save();
     parent::submitForm($form, $form_state);
   }

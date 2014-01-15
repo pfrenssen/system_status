@@ -52,7 +52,7 @@ function system_status_menu() {
  */
 function system_status_access_callback($token = FALSE) {
   $config = \Drupal::config('system_status.settings');
-  if (($config->get('system_status_need_protect_token') == 1 || $config->get('system_status_service_allow_drupalstatus') == 1) && $token !== $config->get('system_status_token')) {
+  if ($config->get('system_status_service_allow_drupalstatus') == 0 || $token !== $config->get('system_status_token')) {
     return FALSE;
   }
 
@@ -61,18 +61,6 @@ function system_status_access_callback($token = FALSE) {
   if ($config->get('system_status_service_allow_drupalstatus') == 1) {
     if ($ip_address == gethostbyname("status.drupalstatus.org")) {
       return TRUE;
-    }
-  }
-
-  if ($config->get('system_status_public_allow_public') == 1) {
-    // I took the easy way out here since i didn't want
-    // to bother writing something to match v6 subnets.
-    $allowed_ips = explode(',', $config->get('system_status_public_allow_ips'));
-
-    foreach ($allowed_ips as &$address) {
-      if ($ip_address === $address) {
-        return TRUE;
-      }
     }
   }
 
