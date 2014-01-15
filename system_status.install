@@ -35,17 +35,3 @@ function system_status_install() {
   variable_set('system_status_encrypt_token', SystemStatusEncryption::getToken());
 }
 
-/**
- * Creates an unique token.
- *
- * Tokens introduced in 7.x-1.x.
- */
-function system_status_update_7200() {
-  if (variable_get('system_status_token', 0) === 0) {
-    variable_set('system_status_token', SystemStatusEncryption::getToken());
-  }
-
-  if (variable_get('system_status_encrypt_token', 0) === 0) {
-    variable_set('system_status_encrypt_token', SystemStatusEncryption::getToken());
-  }
-}
