@@ -1,31 +1,11 @@
 <?php
-/**
- * @file
- * Clean up file for system_status
- */
 
 use Drupal\system_status\Controller\SystemStatusEncryption;
 
 /**
- * Implements hook_uninstall().
- *
- * Removes all settings used by the module.
+ * @file
+ * Installation file for system_status.
  */
-function system_status_uninstall() {
-  variable_del('system_status_service_allow_drupalstatus');
-  variable_del('system_status_public_allow_public');
-  variable_del('system_status_public_allow_ips');
-  variable_del('system_status_do_match_core');
-  variable_del('system_status_do_match_contrib');
-  variable_del('system_status_match_contrib_mode');
-  variable_del('system_status_preg_match_contrib');
-  variable_del('system_status_do_match_custom');
-  variable_del('system_status_preg_match_custom');
-  variable_del('system_status_token');
-  variable_del('system_status_need_protect_token');
-  variable_del('system_status_need_encryption');
-  variable_del('system_status_encrypt_token');
-}
 
 /**
  * Implements hook_install().
@@ -33,7 +13,8 @@ function system_status_uninstall() {
  * Creates a unique set of tokens for this installation.
  */
 function system_status_install() {
-  variable_set('system_status_token', SystemStatusEncryption::getToken());
-  variable_set('system_status_encrypt_token', SystemStatusEncryption::getToken());
+  $config = \Drupal::config('system_status.settings');
+  $config->set('system_status_token', SystemStatusEncryption::getToken());
+  $config->set('system_status_encrypt_token', SystemStatusEncryption::getToken());
+  $config->save();
 }
-
