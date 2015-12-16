@@ -3,9 +3,12 @@
 namespace Drupal\system_status\Access;
 
 use Drupal\Core\Access\AccessCheckInterface;
+use Drupal\Core\Access\AccessResultAllowed;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\HttpFoundation\Request;
+
 
 class SystemStatusAccessCheck implements AccessCheckInterface {
 
@@ -14,8 +17,8 @@ class SystemStatusAccessCheck implements AccessCheckInterface {
   }
   
   public function access(Route $route, Request $request, AccountInterface $account) {
-    // TODO: TOKEN CHECK
-    //return static::DENY;  
-    return static::ALLOW; 
+  // return new AccessResultAllowed();
+   return AccessResult::allowed();
+   //return static::ALLOW;
   }
 }

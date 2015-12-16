@@ -8,6 +8,7 @@
 namespace Drupal\system_status\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Configure pants settings for this site.
@@ -24,7 +25,7 @@ class SystemStatusSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, array &$form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->configFactory->get('system_status.settings');
 
     $form['system_status_service_allow_drupalstatus'] = array(
@@ -46,7 +47,14 @@ class SystemStatusSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, array &$form_state) {
+  protected function getEditableConfigNames() {
+    return ['system_status.settings'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->configFactory->get('system_status.settings');
     $config->set('system_status_service_allow_drupalstatus', $form_state['values']['system_status_service_allow_drupalstatus']);
     $config->save();
