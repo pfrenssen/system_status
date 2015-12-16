@@ -13,7 +13,7 @@ use Drupal\system_status\Controller\SystemStatusEncryption;
  * Creates a unique set of tokens for this installation.
  */
 function system_status_install() {
-  $config = \Drupal::config('system_status.settings');
+  $config = \Drupal::configFactory()->getEditable('system_status.settings');
   $config->set('system_status_token', SystemStatusEncryption::getToken());
   $config->set('system_status_encrypt_token', SystemStatusEncryption::getToken());
   $config->save();
